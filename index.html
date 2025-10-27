@@ -32,31 +32,36 @@
     </header>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const ProfileName = document.getElementById('name');
-            const userName = document.getElementById('user-Name');
-            const imgAvatar = document.getElementById('avatar');
-            const repor = document.getElementById('repor');
-            const followers = document.getElementById('followers');
-            const following = document.getElementById('following');
-            const link = document.getElementById('link');
+    document.addEventListener("DOMContentLoaded", async function() {
+    const ProfileName = document.getElementById('name');
+    const userName = document.getElementById('user-Name');
+    const imgAvatar = document.getElementById('avatar');
+    const repor = document.getElementById('repor');
+    const followers = document.getElementById('followers');
+    const following = document.getElementById('following');
+    const link = document.getElementById('link');
 
-            fetch('https://api.github.com/users/baysory')
-                .then(function(res) {
-                    return res.json();
-                })
-                .then(function(json) {
-                    ProfileName.textContent = json.name;
-                    userName.textContent = '@' + json.login;
-                    imgAvatar.src = json.avatar_url;
-                    repor.textContent = json.public_repos;
-                    followers.textContent = json.followers;
-                    following.textContent = json.following;
-                    link.href = json.html_url;
-                })
+    try {
+        const res = await fetch('https://api.github.com/users/baysory');
 
+        if (!res.ok) {
+            throw new Error('Erro na API: ' + res.status);
+        }
 
-        })
+        const json = await res.json();
+
+        ProfileName.textContent = json.name;
+        userName.textContent = '@' + json.login;
+        imgAvatar.src = json.avatar_url;
+        repor.textContent = json.public_repos;
+        followers.textContent = json.followers;
+        following.textContent = json.following;
+        link.href = json.html_url;
+
+    } catch (error) {
+        console.error('Houve um problema com a requisição fetch:', error);
+    }
+});
     </script>
 </body>
 </html>
